@@ -1,12 +1,8 @@
-# Entornos virtuales
 venv/
 
-# Variables de entorno (¡Crucial para la seguridad!)
 .env
 
-# Archivos temporales de Python
 __pycache__/
 *.py[cod]
 
-# Base de datos local
 db.sqlite3
