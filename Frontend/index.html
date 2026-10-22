@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Evaluación de Estrés</title>
+    <!-- Enlazamos el CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="app-container">
+        
+        <!-- 1. Pantalla de Inicio -->
+        <section id="pantalla-inicio" class="pantalla activa">
+            <h1>SISTEMA DE EVALUACIÓN DE ESTRÉS</h1>
+            <button id="btn-iniciar" class="btn-primario">INICIO</button>
+        </section>
+
+        <!-- 2. Cuestionario -->
+        <section id="pantalla-cuestionario" class="pantalla">
+            <h2>CUESTIONARIO</h2>
+            <form id="form-cuestionario">
+                <label for="edad">Edad:</label>
+                <input type="number" id="edad" required>
+                
+                <label for="sintomas">Otros datos (Etc.):</label>
+                <input type="text" id="sintomas">
+
+                <button type="submit" class="btn-primario">ENVIAR</button>
+            </form>
+        </section>
+
+        <!-- 3. Detectando Frecuencia Cardiaca (Cargando) -->
+        <section id="pantalla-cargando" class="pantalla">
+            <h2>DETECTANDO FRECUENCIA CARDIACA</h2>
+            <p class="loading-text">Cargando...</p>
+            <!-- Animación simple de carga -->
+            <div class="spinner"></div>
+        </section>
+
+        <!-- 4. Error: Datos no encontrados -->
+        <section id="pantalla-error" class="pantalla">
+            <h2>POR FAVOR VUELVA A INTENTAR</h2>
+            <div class="icono-error">X</div>
+            <p>Verifique que el dispositivo esté conectado y no se mueva.</p>
+            <button id="btn-reintentar" class="btn-secundario">Volver a Intentar</button>
+        </section>
+
+        <!-- 5. Datos encontrados (Éxito) -->
+        <section id="pantalla-exito" class="pantalla">
+            <h2>Datos encontrados, no se mueva por favor.</h2>
+            <div class="icono-exito">✓</div>
+            <p>Sincronizando datos...</p>
+        </section>
+
+        <!-- 6. Información de la Evaluación -->
+        <section id="pantalla-evaluacion" class="pantalla">
+            <h2>INFORMACIÓN DE LA EVALUACIÓN</h2>
+            <!-- Este texto cambiará dinámicamente con JS -->
+            <div id="resultado-nivel" class="badge-nivel">ALTO</div>
+            <button id="btn-ver-diagnostico" class="btn-primario">Ver Diagnóstico</button>
+        </section>
+
+        <!-- 7. Diagnóstico Final -->
+        <section id="pantalla-diagnostico" class="pantalla">
+            <h2>CARACTERÍSTICAS SOBRE EL DIAGNÓSTICO</h2>
+            <!-- Este texto cambiará dinámicamente con JS -->
+            <div id="resultado-diagnostico" class="badge-diagnostico">Estrés Metabólico</div>
+            <h3>MONITOREO COMPLETO</h3>
+            <button id="btn-reiniciar" class="btn-secundario">Finalizar</button>
+        </section>
+
+    </div>
+
+    <!-- Enlazamos el JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>
