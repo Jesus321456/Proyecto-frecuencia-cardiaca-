@@ -14,7 +14,7 @@ def crear_administrador(username, email, password, nombre):
             password=password
         )
         
-        nuevo_admin = Cliente.objects.create(
+        nuevo_admin = Administrador.objects.create(
             usuario=nuevo_usuario,
             nombre=nombre
         )

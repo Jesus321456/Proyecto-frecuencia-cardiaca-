@@ -1,3 +1,4 @@
+{% load static %} 
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +7,8 @@
     <title>Inicio de Sesión - Frecuencia Cardíaca</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Sale de la carpeta HTML y entra a CSS -->
-    <link rel="stylesheet" href="../CSS/login.css">
+    <link rel="stylesheet" href="{% static 'CSS/login.css' %}">
+
 </head>
 <body>
 
@@ -38,6 +40,6 @@
     </div>
 
     <!-- Sale de la carpeta HTML y entra a Js -->
-    <script src="../Js/login.js"></script>
+    <script src="{% static 'Js/login.js' %}"></script>
 </body>
 </html>
