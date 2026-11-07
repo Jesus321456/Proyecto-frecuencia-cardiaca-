@@ -78,26 +78,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+# Database
+# https://docs.djangoproject.com/en/6.1/ref/settings/#databases
+
 DATABASES = {
     'default': {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-=======
-=======
->>>>>>> origin/Feacture-001
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST', default='localhost'),
-<<<<<<< HEAD
         'PORT': config('DB_PORT', default='5432'),
->>>>>>> Stashed changes
-=======
-        'PORT': config('DB_PORT', default='5433'),
->>>>>>> origin/Feacture-001
     }
 }
 
