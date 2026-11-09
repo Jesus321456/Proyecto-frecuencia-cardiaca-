@@ -8,7 +8,7 @@ document.getElementById('formularioLogin').addEventListener('submit', function(e
     cajaMensaje.style.color = "black";
     cajaMensaje.textContent = "Validando credenciales...";
 
-    fetch('http://127.0.0.1:8000/auth/login/', {
+    fetch('/auth/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: usuarioInput, password: passwordInput })
