@@ -22,9 +22,9 @@ document.getElementById('formularioLogin').addEventListener('submit', function(e
             localStorage.setItem('id_usuario', res.body.id_usuario);
             localStorage.setItem('rol_usuario', res.body.rol);
             
-            // Redirección
             setTimeout(() => {
-                if (res.body.rol === 'administrador') {
+                // Validación flexible para detectar administrador sin importar mayúsculas/minúsculas
+                if (res.body.rol && res.body.rol.toLowerCase() === 'administrador') {
                     window.location.href = 'panel_admin.html';
                 } else {
                     window.location.href = 'evaluacion.html';
