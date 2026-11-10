@@ -40,7 +40,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = config(
     'CSRF_TRUSTED_ORIGINS',
-    default='',
+    default='https://proyecto-frecuencia-cardiaca-production.up.railway.app',
     cast=Csv(),
 )
 
@@ -172,5 +172,7 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 

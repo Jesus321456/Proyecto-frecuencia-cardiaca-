@@ -18,6 +18,7 @@
         </div>
         
         <form id="formularioLogin">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="username">Usuario</label>
                 <input type="text" id="username" placeholder="Ingresa tu usuario" required>
