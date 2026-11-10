@@ -12,6 +12,7 @@
         <div class="tarjeta-glass">
             <h2 style="text-align: center; margin-bottom: 20px;">Nuevo Paciente</h2>
             <form id="formRegistro">
+                {% csrf_token %}
                 <div class="grupo-form">
                     
                     <label>Nombre Completo</label>
@@ -30,7 +31,7 @@
                     <input type="password" id="reg_password" required>
                 </div>
                 <button type="submit" class="btn btn-primario">Registrarse</button>
-                <button type="button" class="btn btn-secundario" onclick="window.location.href='login.html'">Volver al Login</button>
+                <button type="button" class="btn btn-secundario" onclick="window.location.href='/login/'">Volver al Login</button>
             </form>
             <div id="mensajeRegistro" class="alerta"></div>
         </div>

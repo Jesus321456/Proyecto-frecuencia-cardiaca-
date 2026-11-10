@@ -1,8 +1,12 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const formRegistro = document.getElementById('formRegistro');
     const mensajeRegistro = document.getElementById('mensajeRegistro');
 
     if (formRegistro) {
+        const csrfInput = formRegistro.querySelector('[name="csrfmiddlewaretoken"]');
+        const csrfToken = csrfInput ? csrfInput.value : '';
+
         formRegistro.addEventListener('submit', async function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -18,6 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (mensajeRegistro) {
                     mensajeRegistro.style.color = "red";
                     mensajeRegistro.textContent = "Todos los campos son obligatorios.";
+                }
+                return;
+            }
+
+            if (!csrfToken) {
+                if (mensajeRegistro) {
+                    mensajeRegistro.style.color = "red";
+                    mensajeRegistro.textContent = "No se encontró el token de seguridad.";
                 }
                 return;
             }
@@ -40,7 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch('/auth/clientes/crear/', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
                     },
                     body: JSON.stringify(datosRegistro)
                 });
