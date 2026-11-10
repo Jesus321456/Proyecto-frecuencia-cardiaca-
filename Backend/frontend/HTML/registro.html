@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Cuenta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/registro.css">
+</head>
+<body>
+    <div class="pantalla-centrada">
+        <div class="tarjeta-glass">
+            <h2 style="text-align: center; margin-bottom: 20px;">Nuevo Paciente</h2>
+            <form id="formRegistro">
+                <div class="grupo-form">
+                    
+                    <label>Nombre Completo</label>
+                    <input type="text" id="reg_nombre" required>
+                </div>
+                <div class="grupo-form">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="reg_email" required>
+                </div>
+                <div class="grupo-form">
+                    <label>Usuario</label>
+                    <input type="text" id="reg_usuario" required>
+                </div>
+                <div class="grupo-form">
+                    <label>Contraseña</label>
+                    <input type="password" id="reg_password" required>
+                </div>
+                <button type="submit" class="btn btn-primario">Registrarse</button>
+                <button type="button" class="btn btn-secundario" onclick="window.location.href='login.html'">Volver al Login</button>
+            </form>
+            <div id="mensajeRegistro" class="alerta"></div>
+        </div>
+    </div>
+    <script src="../Js/registro.js"></script>
+</body>
+</html>

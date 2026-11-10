@@ -1,0 +1,116 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #4f46e5 0%, #2575fc 50%, #60a5fa 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1e1e2f;
+    padding: 20px;
+}
+
+.pantalla-centrada {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tarjeta-glass {
+    background: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.tarjeta-glass h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1e1e2f;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.grupo-form {
+    margin-bottom: 18px;
+}
+
+.grupo-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+.grupo-form input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.grupo-form input:focus {
+    border-color: #2575fc;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.15);
+    background: #ffffff;
+}
+
+.btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+}
+
+.btn-primario {
+    background: linear-gradient(135deg, #2575fc 0%, #4f46e5 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
+}
+
+.btn-primario:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+}
+
+.btn-primario:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secundario {
+    background: #f1f5f9;
+    color: #4f46e5;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-secundario:hover {
+    background: #e2e8f0;
+}
+
+.alerta {
+    margin-top: 18px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 500;
+}
