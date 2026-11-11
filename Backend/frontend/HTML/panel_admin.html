@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consola de Administración - Frecuencia Cardíaca</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/app.css">
+</head>
+<body class="admin-body">
+
+    <!-- 1. MENÚ LATERAL (SIDEBAR) -->
+    <aside class="sidebar" aria-label="Menú de Navegación">
+        <div class="sidebar-brand">
+            <span class="brand-icon" aria-hidden="true">🫀</span>
+            <div class="brand-text">
+                <h2>CardioAdmin</h2>
+                <span class="brand-subtitle">Panel Clínico</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#pacientes" class="nav-item activo" onclick="cambiarVista('pacientes', event)">
+                <span class="nav-icon">👥</span>
+                <span>Pacientes</span>
+            </a>
+            <a href="#administradores" class="nav-item" onclick="cambiarVista('administradores', event)">
+                <span class="nav-icon">🛡️</span>
+                <span>Administradores</span>
+            </a>
+            <a href="#estres" class="nav-item" onclick="cambiarVista('estres', event)">
+                <span class="nav-icon">🧠</span>
+                <span>Tipos de Estrés</span>
+            </a>
+            <a href="#registro" class="nav-item" onclick="cambiarVista('registro', event)">
+                <span class="nav-icon">➕</span>
+                <span>Registrar Usuario</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button type="button" class="btn-salir-sidebar" onclick="cerrarSesion()">
+                <span>🚪</span> Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+
+    <!-- 2. CONTENEDOR PRINCIPAL -->
+    <div class="main-wrapper">
+        
+        <!-- Barra Superior (Header Minimalista) -->
+        <header class="top-navbar">
+            <div id="indicadorRol" class="user-role-badge">
+                <span class="pulse-dot"></span>
+                <span>Modo Administrador Activo</span>
+            </div>
+            <div class="user-profile-info">
+                <span class="avatar-circle">TG</span>
+                <span class="user-name">Thania G.</span>
+            </div>
+        </header>
+
+        <!-- Contenido Dinámico / Vistas -->
+        <main class="dashboard-content">
+            
+            <!-- VISTA: PACIENTES -->
+            <section id="vista-pacientes" class="vista-seccion activa">
+                <div class="section-header">
+                    <div>
+                        <h2>Gestión de Pacientes</h2>
+                        <p class="section-desc">Monitoreo de perfiles y registros de frecuencia cardíaca.</p>
+                    </div>
+                </div>
+
+                <div class="admin-dashboard-grid">
+                    <div class="tarjeta-panel">
+                        <h3>Pacientes Registrados</h3>
+                        <div class="table-responsive">
+                            <table class="tabla-datos" id="tablaPacientes">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Usuario</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Historial Dinámica (Aparece al seleccionar un paciente) -->
+                    <div class="tarjeta-panel seccion-historial" id="seccionHistorial" style="display: none;">
+                        <div class="historial-header">
+                            <h3 id="tituloHistorial">Historial del Paciente</h3>
+                            <button type="button" class="btn btn-secundario btn-sm" onclick="cerrarHistorial()">Cerrar</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="tabla-datos" id="tablaHistorial">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">BPM</th>
+                                        <th scope="col">Estrés</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA: ADMINISTRADORES -->
+            <section id="vista-administradores" class="vista-seccion" style="display: none;">
+                <div class="section-header">
+                    <div>
+                        <h2>Administradores del Sistema</h2>
+                        <p class="section-desc">Control de accesos y privilegios elevados.</p>
+                    </div>
+                </div>
+                <div class="tarjeta-panel">
+                    <div class="table-responsive">
+                        <table class="tabla-datos" id="tablaAdministradores">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA: TIPOS DE ESTRÉS Y FORMULARIO -->
+            <section id="vista-estres" class="vista-seccion" style="display: none;">
+                <div class="section-header">
+                    <div>
+                        <h2>Catálogo de Tipos de Estrés</h2>
+                        <p class="section-desc">Clasificación de niveles cardíacos y estados emocionales.</p>
+                    </div>
+                </div>
+
+                <div class="grid-dos-columnas">
+                    <div class="tarjeta-panel">
+                        <div class="table-responsive">
+                            <table class="tabla-datos" id="tablaTiposEstres">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Nivel</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta-panel">
+                        <h3>Nuevo Tipo de Estrés</h3>
+                        <form id="formTipoEstres" novalidate>
+                            <div class="grupo-form">
+                                <label for="inputNivel">Nivel de Estrés</label>
+                                <input type="text" id="inputNivel" placeholder="Ej. Bajo, Alto" required autocomplete="off">
+                            </div>
+                            <div class="grupo-form">
+                                <label for="inputTipo">Tipo de Estrés</label>
+                                <input type="text" id="inputTipo" placeholder="Ej. Laboral, Físico" required autocomplete="off">
+                            </div>
+                            <button type="submit" class="btn btn-primario btn-submit">Guardar Estrés</button>
+                        </form>
+                        <div id="msjEstres" class="alerta" role="alert"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA: REGISTRO DE USUARIOS -->
+            <section id="vista-registro" class="vista-seccion" style="display: none;">
+                <div class="section-header">
+                    <div>
+                        <h2>Registro de Nuevos Usuarios</h2>
+                        <p class="section-desc">Da de alta nuevos pacientes o administradores en la plataforma.</p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-panel tarjeta-centrada">
+                    <form id="formNuevoUsuario" novalidate>
+                        <div class="grupo-form">
+                            <label for="tipoRol">Tipo de Cuenta</label>
+                            <select id="tipoRol" required class="select-personalizado">
+                                <option value="cliente">Cliente / Paciente</option>
+                                <option value="administrador">Administrador</option>
+                            </select>
+                        </div>
+                        <div class="grupo-form">
+                            <label for="nuevoNombre">Nombre Completo</label>
+                            <input type="text" id="nuevoNombre" required autocomplete="name">
+                        </div>
+                        <div class="grupo-form">
+                            <label for="nuevoUsername">Usuario</label>
+                            <input type="text" id="nuevoUsername" required autocomplete="username">
+                        </div>
+                        <div class="grupo-form">
+                            <label for="nuevoPassword">Contraseña</label>
+                            <input type="password" id="nuevoPassword" required autocomplete="new-password">
+                        </div>
+                        <button type="submit" class="btn btn-primario btn-submit">Crear Usuario</button>
+                    </form>
+                    <div id="msjUsuario" class="alerta" role="alert"></div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="../Js/panel_admin.js"></script>
+</body>
+</html>
