@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoreo / Sensor - CardioCliente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/app.css">
+    <style>
+        /* Animación de carga circular (opcional, si aún la prefieres en lugar del corazón) */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* =========================================
+           ANIMACIÓN DE ELECTROCARDIOGRAMA (ECG)
+           ========================================= */
+        .ecg-sensor-container {
+            width: 100%;
+            height: 60px;
+            margin: 10px auto 25px; /* Margen ajustado para quedar pegado a los BPM */
+            opacity: 0.9;
+        }
+
+        .ecg-line {
+            fill: none;
+            stroke: #e11d48; /* Carmesí vibrante */
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawECG 3s linear infinite;
+            filter: drop-shadow(0 0 8px rgba(225, 29, 72, 0.4)); /* Resplandor rojo */
+        }
+
+        @keyframes drawECG {
+            0% { stroke-dashoffset: 1000; }
+            50% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -1000; }
+        }
+        
+        /* Animación de palpitación para el número de BPM */
+        .bpm-pulsing {
+            animation: textPulse 1s infinite;
+        }
+
+        @keyframes textPulse {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.05); }
+            40% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="admin-body">
+
+    <aside class="sidebar" aria-label="Menú de Navegación">
+        <div class="sidebar-brand">
+            <span class="brand-icon" aria-hidden="true">🫀</span>
+            <div class="brand-text">
+                <h2>CardioCliente</h2>
+                <span class="brand-subtitle">Mi Perfil Inteligente</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="form1.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span>Datos Personales</span>
+            </a>
+            <a href="form2.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Estilo de Vida</span>
+            </a>
+            <a href="sensor.html" class="nav-item activo">
+                <span class="nav-icon">🫀</span>
+                <span>Sensor de Estrés</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button type="button" class="btn-salir-sidebar" onclick="cerrarSesion()">
+                <span>🚪</span> Salir
+            </button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-navbar">
+            <div id="indicadorRol" class="user-role-badge">
+                <span class="pulse-dot"></span>
+                <span>Calibración de Estrés Activa</span>
+            </div>
+            <div class="user-profile-info">
+                <span class="avatar-circle">TP</span>
+                <span class="user-name">Paciente</span>
+            </div>
+        </header>
+
+        <main class="dashboard-content">
+            <div class="tarjeta-panel tarjeta-perfil-centrada">
+                
+                <div class="form-header-title">
+                    <h2>Medición Fisiológica</h2>
+                    <p class="section-desc">Conecta el sensor para obtener tus signos vitales (BPM y Estrés).</p>
+                </div>
+
+                <div id="msjSensor" class="alerta" role="alert" style="display:none; margin-bottom: 20px;"></div>
+
+                <!-- SECCIÓN 1: Botones de conexión -->
+                <div id="seccionConexion">
+                    <button type="button" class="btn-primario btn-lg" style="width: 100%; margin-bottom: 15px;" onclick="iniciarMedicionReal()">
+                        Conectar Sensor Real (GEOID HS500)
+                    </button>
+                    
+                    <button type="button" class="btn-salir-sidebar" style="width: 100%; border: 1px solid #ccc; padding: 12px; color: #475569; background: #f8fafc;" onclick="simularMedicion()">
+                        Simular Medición (Modo Prueba)
+                    </button>
+                </div>
+
+                <!-- SECCIÓN 2: Animación de carga y métricas en tiempo real -->
+                <div id="seccionMidiendo" style="display: none; text-align: center; padding: 30px 0;">
+                    
+                    <!-- Visualizador de BPM en tiempo real -->
+                    <h1 id="txtBpmReal" class="bpm-pulsing" style="font-size: 5.5rem; color: #e11d48; margin: 0; font-weight: 700; line-height: 1;">--</h1>
+                    <span style="font-size: 1rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">BPM (Latidos por minuto)</span>
+                    
+                    <!-- LÍNEA DE ELECTROCARDIOGRAMA ANIMADA -->
+                    <div class="ecg-sensor-container">
+                        <svg viewBox="0 0 500 60" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+                            <path class="ecg-line" d="M0,30 L150,30 L165,10 L180,50 L200,5 L220,55 L235,30 L350,30 L365,15 L380,45 L395,30 L500,30" />
+                        </svg>
+                    </div>
+                    
+                    <!-- Estado de la medición -->
+                    <h3 style="margin-top: 15px; color: #0f172a; font-weight: 600;">Extrayendo datos HRV (RMSSD)...</h3>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 5px;">
+                        <span style="font-size: 1.5rem; font-weight: bold; color: #4f46e5;" id="contadorSegundos">5s</span>
+                        <div class="spinner" style="border: 3px solid #e2e8f0; border-top: 3px solid #4f46e5; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite;"></div>
+                    </div>
+                    
+                    <p style="color: #64748b; font-size: 0.9rem; margin-top: 15px;">Por favor, mantén la calma y no te muevas para una lectura precisa.</p>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../Js/sensor.js"></script>
+</body>
+</html>

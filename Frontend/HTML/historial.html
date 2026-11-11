@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Evaluaciones - CardioCliente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/app.css">
+</head>
+<body class="admin-body">
+
+    <header class="top-navbar">
+        <div class="user-role-badge">
+            <span class="pulse-dot"></span>
+            <span>Mi Historial Clínico</span>
+        </div>
+        <div class="user-profile-info">
+            <span class="avatar-circle">TP</span>
+            <span class="user-name">Paciente</span>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <div class="tarjeta-panel tarjeta-perfil-centrada" style="max-width: 850px;">
+            
+            <div class="form-header-title">
+                <h2>Tus Evaluaciones Anteriores</h2>
+                <p class="section-desc">Registro histórico de frecuencia cardíaca y niveles de estrés detectados.</p>
+            </div>
+
+            <div class="tabla-contenedor" style="overflow-x: auto;">
+                <table class="tabla-historial" style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #e2e8f0;">
+                            <th style="padding: 12px;">Fecha y Hora</th>
+                            <th style="padding: 12px;">BPM (Promedio)</th>
+                            <th style="padding: 12px;">RMSSD</th>
+                            <th style="padding: 12px;">Nivel de Estrés</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTablaHistorial">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #666; padding: 20px;">
+                                Cargando historial desde el servidor...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center;">
+                <!-- CAMBIO AQUÍ: Botón para volver al panel de admin -->
+                <button type="button" class="btn-primario btn-lg" style="flex: 1; max-width: 250px;" onclick="window.location.href='panel_admin.html'">
+                    Volver al Panel
+                </button>
+                <button type="button" class="btn-salir-sidebar" style="flex: 1; max-width: 250px; padding: 12px;" onclick="cerrarSesion()">
+                    Cerrar Sesión
+                </button>
+            </div>
+
+            <div id="msjHistorial" class="alerta" style="margin-top: 15px;"></div>
+        </div>
+    </main>
+
+    <script src="../Js/historial.js"></script>
+</body>
+</html>
