@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .service import login_usuario, crear_administrador, crear_cliente, obtener_todos_los_clientes, obtener_todos_los_administradores
+from .service import login_usuario, crear_administrador, crear_cliente, obtener_todos_los_clientes, obtener_todos_los_administradores, eliminar_cliente, eliminar_administrador
 
 #Las rutas de este controlador empiezan con /auth/ y se encargan de manejar la autenticación y gestión de usuarios.
 @api_view(['GET'])
@@ -81,15 +81,34 @@ def login_api(request):
     if not username or not password:
         return Response({"error": "Usuario y contraseña son obligatorios"}, status=400)
         
-    # Llamamos al servicio
-    usuario, rol = login_usuario(username, password)
+    usuario, rol, nombre = login_usuario(username, password)
     
     if usuario is not None:
         return Response({
             "mensaje": "Login exitoso",
             "id_usuario": usuario.id,
             "username": usuario.username,
-            "rol": rol  
+            "rol": rol,
+            "nombre": nombre
         }, status=200)
     else:
         return Response({"error": rol}, status=401)
+
+
+
+@api_view(['DELETE'])
+def eliminar_cliente_api(request, cliente_id):
+    ok, mensaje = eliminar_cliente(cliente_id)
+
+    if ok:
+        return Response({"mensaje": mensaje}, status=200)
+    return Response({"error": mensaje}, status=404)
+
+
+@api_view(['DELETE'])
+def eliminar_administrador_api(request, admin_id):
+    ok, mensaje = eliminar_administrador(admin_id, usuario_solicitante=request.user)
+
+    if ok:
+        return Response({"mensaje": mensaje}, status=200)
+    return Response({"error": mensaje}, status=400)

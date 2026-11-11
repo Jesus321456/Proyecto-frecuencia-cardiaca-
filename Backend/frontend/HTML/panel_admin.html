@@ -1,18 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Consola de Administración - Frecuencia Cardíaca</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../CSS/app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'CSS/app.css' %}">
 </head>
+
 <body class="admin-body">
 
-    <!-- 1. MENÚ LATERAL (SIDEBAR) -->
     <aside class="sidebar" aria-label="Menú de Navegación">
         <div class="sidebar-brand">
-            <span class="brand-icon" aria-hidden="true">🫀</span>
+            <img src="{% static 'img/ritmo-cardiaco.png' %}" alt="Icono frecuencia" class="nav-icon-custom">
+
             <div class="brand-text">
                 <h2>CardioAdmin</h2>
                 <span class="brand-subtitle">Panel Clínico</span>
@@ -21,49 +26,45 @@
 
         <nav class="sidebar-nav">
             <a href="#pacientes" class="nav-item activo" onclick="cambiarVista('pacientes', event)">
-                <span class="nav-icon">👥</span>
+                <img src="{% static 'img/pacientes.png' %}" alt="Icono Pacientes" class="nav-icon-custom">
                 <span>Pacientes</span>
             </a>
             <a href="#administradores" class="nav-item" onclick="cambiarVista('administradores', event)">
-                <span class="nav-icon">🛡️</span>
+                <img src="{% static 'img/administradores.png' %}" alt="Icono Administradores" class="nav-icon-custom">
                 <span>Administradores</span>
             </a>
             <a href="#estres" class="nav-item" onclick="cambiarVista('estres', event)">
-                <span class="nav-icon">🧠</span>
+                <img src="{% static 'img/estres.png' %}" alt="Icono Estrés" class="nav-icon-custom">
                 <span>Tipos de Estrés</span>
             </a>
             <a href="#registro" class="nav-item" onclick="cambiarVista('registro', event)">
-                <span class="nav-icon">➕</span>
+                <img src="{% static 'img/registro.png' %}" alt="Icono Registro" class="nav-icon-custom">
                 <span>Registrar Usuario</span>
             </a>
         </nav>
 
         <div class="sidebar-footer">
-            <button type="button" class="btn-salir-sidebar" onclick="cerrarSesion()">
-                <span>🚪</span> Cerrar Sesión
+            <button type="button" class="btn-salir-sidebar" onclick="cerrarSesion()" aria-label="Cerrar sesión">
+                Cerrar Sesión
             </button>
         </div>
     </aside>
 
-    <!-- 2. CONTENEDOR PRINCIPAL -->
     <div class="main-wrapper">
-        
-        <!-- Barra Superior (Header Minimalista) -->
+
         <header class="top-navbar">
             <div id="indicadorRol" class="user-role-badge">
                 <span class="pulse-dot"></span>
                 <span>Modo Administrador Activo</span>
             </div>
             <div class="user-profile-info">
-                <span class="avatar-circle">TG</span>
-                <span class="user-name">Thania G.</span>
+                <span class="avatar-circle" id="avatarUsuario">AD</span>
+                <span class="user-name" id="nombreUsuario">Administrador</span>
             </div>
         </header>
 
-        <!-- Contenido Dinámico / Vistas -->
         <main class="dashboard-content">
-            
-            <!-- VISTA: PACIENTES -->
+
             <section id="vista-pacientes" class="vista-seccion activa">
                 <div class="section-header">
                     <div>
@@ -82,7 +83,7 @@
                                         <th scope="col">ID</th>
                                         <th scope="col">Usuario</th>
                                         <th scope="col">Nombre</th>
-                                        <th scope="col">Acciones</th>
+                                        <th scope="col" class="th-acciones">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -90,11 +91,11 @@
                         </div>
                     </div>
 
-                    <!-- Sección de Historial Dinámica (Aparece al seleccionar un paciente) -->
                     <div class="tarjeta-panel seccion-historial" id="seccionHistorial" style="display: none;">
                         <div class="historial-header">
                             <h3 id="tituloHistorial">Historial del Paciente</h3>
-                            <button type="button" class="btn btn-secundario btn-sm" onclick="cerrarHistorial()">Cerrar</button>
+                            <button type="button" class="btn btn-secundario btn-sm"
+                                onclick="cerrarHistorial()">Cerrar</button>
                         </div>
                         <div class="table-responsive">
                             <table class="tabla-datos" id="tablaHistorial">
@@ -112,7 +113,6 @@
                 </div>
             </section>
 
-            <!-- VISTA: ADMINISTRADORES -->
             <section id="vista-administradores" class="vista-seccion" style="display: none;">
                 <div class="section-header">
                     <div>
@@ -128,6 +128,7 @@
                                     <th scope="col">ID</th>
                                     <th scope="col">Usuario</th>
                                     <th scope="col">Nombre</th>
+                                    <th scope="col" class="th-acciones">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -136,7 +137,6 @@
                 </div>
             </section>
 
-            <!-- VISTA: TIPOS DE ESTRÉS Y FORMULARIO -->
             <section id="vista-estres" class="vista-seccion" style="display: none;">
                 <div class="section-header">
                     <div>
@@ -167,20 +167,20 @@
                         <form id="formTipoEstres" novalidate>
                             <div class="grupo-form">
                                 <label for="inputNivel">Nivel de Estrés</label>
-                                <input type="text" id="inputNivel" placeholder="Ej. Bajo, Alto" required autocomplete="off">
+                                <input type="text" id="inputNivel" placeholder="Ej. Bajo, Alto" required
+                                    autocomplete="off">
                             </div>
                             <div class="grupo-form">
                                 <label for="inputTipo">Tipo de Estrés</label>
-                                <input type="text" id="inputTipo" placeholder="Ej. Laboral, Físico" required autocomplete="off">
+                                <input type="text" id="inputTipo" placeholder="Ej. Laboral, Físico" required
+                                    autocomplete="off">
                             </div>
                             <button type="submit" class="btn btn-primario btn-submit">Guardar Estrés</button>
                         </form>
-                        <div id="msjEstres" class="alerta" role="alert"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- VISTA: REGISTRO DE USUARIOS -->
             <section id="vista-registro" class="vista-seccion" style="display: none;">
                 <div class="section-header">
                     <div>
@@ -212,13 +212,15 @@
                         </div>
                         <button type="submit" class="btn btn-primario btn-submit">Crear Usuario</button>
                     </form>
-                    <div id="msjUsuario" class="alerta" role="alert"></div>
                 </div>
             </section>
 
         </main>
     </div>
 
-    <script src="../Js/panel_admin.js"></script>
+    <div id="toast-container"></div>
+
+    <script src="{% static 'Js/panel_admin.js' %}"></script>
 </body>
+
 </html>

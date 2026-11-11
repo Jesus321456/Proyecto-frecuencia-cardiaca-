@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .service import obtener_todos_los_tipos_estres,crear_nuevo_tipo_estres, obtener_tipo_estres_por_id, actualizar_tipo_estres
+from .service import obtener_todos_los_tipos_estres,crear_nuevo_tipo_estres, obtener_tipo_estres_por_id, actualizar_tipo_estres, eliminar_tipo_estres
 
 #Las rutas de este controlador empiezan con /catalogo/ y se encargan de manejar los tipos de estrés.
 @api_view(['GET'])
@@ -67,3 +67,10 @@ def actualizar_tipo_estres_api(request, pk):
         }, status=200)
     
     return Response({"error": "No se encontró el registro con ese ID"}, status=404)
+
+@api_view(['DELETE'])
+def eliminar_tipo_estres_api(request, pk):
+    ok, mensaje = eliminar_tipo_estres(pk)
+    if ok:
+        return Response({"mensaje": mensaje}, status=200)
+    return Response({"error": mensaje}, status=404)

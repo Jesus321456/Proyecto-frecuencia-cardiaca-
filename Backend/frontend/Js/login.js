@@ -41,13 +41,13 @@ document.getElementById('formularioLogin').addEventListener('submit', function(e
             
             localStorage.setItem('id_usuario', res.body.id_usuario);
             localStorage.setItem('rol_usuario', res.body.rol);
+            localStorage.setItem('nombre', res.body.nombre);
             
             setTimeout(() => {
-                // Validación flexible para detectar administrador sin importar mayúsculas/minúsculas
                 if (res.body.rol && res.body.rol.toLowerCase() === 'administrador') {
-                    window.location.href = 'panel_admin.html';
+                    window.location.href = '/panel_admin/';
                 } else {
-                    window.location.href = 'evaluacion.html';
+                    window.location.href = '/registro/';
                 }
             }, 1000);
             
