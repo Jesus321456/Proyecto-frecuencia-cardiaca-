@@ -1,75 +1,122 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    verificarRolUsuario();
+
     const formulario = document.getElementById('formEstiloVida');
-    const cajaMensaje = document.getElementById('msjSensor'); 
 
     if (!formulario) {
-        console.error("No se encontró el formulario.");
+        console.error("No se encontró el formulario con ID 'formEstiloVida'.");
         return;
     }
 
     formulario.addEventListener('submit', async function(e) {
         e.preventDefault(); 
-        
-        alert("Paso 1: Botón presionado y evento iniciado.");
 
         const usuarioId = localStorage.getItem('id_usuario');
-        alert("Paso 2: Tu ID de usuario es: " + usuarioId);
+
 
         if (!usuarioId) {
-            alert("No hay sesión. Regresando al login...");
-            window.location.href = 'login.html';
+            toastError("No hay sesión activa. Regresando al login...");
+            setTimeout(() => { window.location.href = '/login/'; }, 2000);
             return;
         }
 
+
         try {
             const datosEstiloVida = {
-                // Verificamos que pueda leer todos los campos sin explotar
                 hora_sueno: parseFloat(document.getElementById('horas_sueno').value) || 0, 
                 calidad_sueno: parseInt(document.getElementById('calidad_sueno').value) || 0,
                 nivel_actividad: parseInt(document.getElementById('nivel_actividad').value) || 0,
-                presion_arterial: document.getElementById('presion_arterial').value.trim(),
                 pasos_diarios: parseInt(document.getElementById('pasos_diarios').value) || 0,
                 trastorno_sueno: document.getElementById('trastorno_sueno').value
             };
             
-            alert("Paso 3: Datos leídos correctamente del HTML.");
-            alert("Paso 4: Enviando datos a Django...");
+            toastInfo("Guardando estilo de vida...");
 
-            const response = await fetch(`http://127.0.0.1:8000/evaluaciones/crear/${usuarioId}/`, {
+            const response = await fetch(`/evaluaciones/crear/${usuarioId}/`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                 },
                 body: JSON.stringify(datosEstiloVida)
             });
-            
-            alert("Paso 5: Django ya respondió. Status HTTP: " + response.status);
 
             if (!response.ok) {
                 const textoError = await response.text();
-                alert("❌ Django rechazó los datos: " + textoError);
-                return;
+                console.error("Respuesta del servidor:", textoError);
+                throw new Error("Error al guardar en el servidor. Revisa la consola.");
             }
 
             const data = await response.json();
-            alert("Paso 6: Éxito de Django. Recibimos esto: " + JSON.stringify(data));
 
             if (data.id_evaluacion) {
                 localStorage.setItem('id_evaluacion', data.id_evaluacion);
-                alert("Paso 7: ¡ID guardado! Redirigiendo al sensor en 1 segundo...");
+                
+                toastExito("¡Estilo de vida guardado! Redirigiendo al sensor...");
+                
                 setTimeout(() => {
-                    window.location.href = 'sensor.html';
-                }, 1000);
+                    window.location.href = '/sensor/'; 
+                }, 1500);
             } else {
-                alert("❌ Django respondió bien, pero olvidó enviar el 'id_evaluacion'.");
+                throw new Error("Django respondió bien, pero no envió el 'id_evaluacion'.");
             }
 
         } catch (error) {
-            alert("🛑 El código explotó aquí: " + error.message);
             console.error(error);
+            toastError(error.message || "Ocurrió un error inesperado al guardar.");
         }
     });
 });
 
+
+function verificarRolUsuario() {
+    const nombre = localStorage.getItem('nombre') || 'Paciente Nuevo'; 
+    const elementoNombre = document.getElementById('nombreUsuario');
+    const elementoAvatar = document.getElementById('avatarUsuario');
+
+    if (elementoNombre && elementoAvatar) {
+        elementoNombre.textContent = nombre;
+        elementoAvatar.textContent = nombre.substring(0, 2).toUpperCase(); 
+    }
+}
+
+function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
+    const contenedor = document.getElementById('toast-container');
+    if (!contenedor) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-custom toast-${tipo}`;
+    toast.innerHTML = `</span><span>${mensaje}</span>`;
+
+    contenedor.appendChild(toast);
+    
+    requestAnimationFrame(() => toast.classList.add('mostrar'));
+
+    setTimeout(() => {
+        toast.classList.remove('mostrar');
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, duracion);
+}
+
+function toastExito(msg) { mostrarToast(msg, 'exito'); }
+function toastError(msg) { mostrarToast(msg, 'error', 4000); } 
+function toastInfo(msg)  { mostrarToast(msg, 'info'); }
+
 function cerrarSesion() {
     localStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href = '/login/';
 }

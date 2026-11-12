@@ -1,13 +1,11 @@
-/* =========================================
-   1. VARIABLES Y ESTRUCTURA BASE
-   ========================================= */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --primary: #4f46e5;      /* Índigo elegante */
+    --primary: #4f46e5;      
     --primary-dark: #3730a3;
     --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-    --heart-color: #e11d48;  /* Carmesí vibrante para el sensor */
+    --heart-color: #e11d48;  
     --text-main: #0f172a;
     --text-muted: #64748b;
     --glass-bg: rgba(255, 255, 255, 0.98);
@@ -30,9 +28,7 @@ body {
     flex-direction: column;
 }
 
-/* =========================================
-   2. TARJETAS Y CONTENEDORES GLASS
-   ========================================= */
+
 .pantalla-centrada {
     display: flex;
     justify-content: center;
@@ -82,9 +78,6 @@ h2 {
     font-size: 14px;
 }
 
-/* =========================================
-   3. FORMULARIOS
-   ========================================= */
 .grupo-form, .form-group {
     margin-bottom: 22px;
 }
@@ -125,9 +118,6 @@ input:focus, select:focus {
     gap: 20px;
 }
 
-/* =========================================
-   4. BOTONES
-   ========================================= */
 .botones {
     display: flex;
     flex-direction: column;

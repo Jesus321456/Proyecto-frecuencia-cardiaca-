@@ -47,7 +47,7 @@ document.getElementById('formularioLogin').addEventListener('submit', function(e
                 if (res.body.rol && res.body.rol.toLowerCase() === 'administrador') {
                     window.location.href = '/panel_admin/';
                 } else {
-                    window.location.href = '/registro/';
+                    window.location.href = '/formulario_uno/';
                 }
             }, 1000);
             

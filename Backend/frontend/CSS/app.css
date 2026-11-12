@@ -585,3 +585,48 @@ dialog.modal-custom .modal-acciones {
     gap: 12px;
     margin-top: 24px;
 }
+
+ /* Animación de carga circular (opcional, si aún la prefieres en lugar del corazón) */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* =========================================
+           ANIMACIÓN DE ELECTROCARDIOGRAMA (ECG)
+           ========================================= */
+        .ecg-sensor-container {
+            width: 100%;
+            height: 60px;
+            margin: 10px auto 25px; /* Margen ajustado para quedar pegado a los BPM */
+            opacity: 0.9;
+        }
+
+        .ecg-line {
+            fill: none;
+            stroke: #e11d48; /* Carmesí vibrante */
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawECG 3s linear infinite;
+            filter: drop-shadow(0 0 8px rgba(225, 29, 72, 0.4)); /* Resplandor rojo */
+        }
+
+        @keyframes drawECG {
+            0% { stroke-dashoffset: 1000; }
+            50% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -1000; }
+        }
+        
+        .bpm-pulsing {
+            animation: textPulse 1s infinite;
+        }
+
+        @keyframes textPulse {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.05); }
+            40% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }

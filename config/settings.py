@@ -176,5 +176,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+TIME_ZONE = 'America/Mexico_City' 
+USE_TZ = True
 
 

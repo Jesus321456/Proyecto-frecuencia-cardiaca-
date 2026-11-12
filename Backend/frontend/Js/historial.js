@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cuerpoTabla = document.getElementById('cuerpoTablaHistorial');
     const cajaMensaje = document.getElementById('msjHistorial');
     
-    // 1. Obtenemos el ID del paciente que el Admin seleccionó
     const usuarioId = localStorage.getItem('id_paciente_seleccionado');
     const nombrePaciente = localStorage.getItem('nombre_paciente_seleccionado');
 
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // Cambiamos el título para que muestre el nombre del paciente
     if (nombrePaciente) {
         const titulo = document.querySelector('.form-header-title h2');
         if (titulo) titulo.textContent = `Historial de: ${nombrePaciente}`;
@@ -26,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/evaluaciones/historial/${usuarioId}/`);
+        const response = await fetch(`/evaluaciones/historial/${usuarioId}/`);
         
         if (!response.ok) {
             throw new Error("No se pudo obtener el historial.");

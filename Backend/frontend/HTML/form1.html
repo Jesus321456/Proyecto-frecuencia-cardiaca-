@@ -1,111 +1,50 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Paso 1: Datos Personales - CardioCliente</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../CSS/app.css">
-    <style>
-        /* Mejoras Premium para los Formularios Clínicos */
-        .stepper-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'CSS/form1.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/app.css' %}">
 
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #94a3b8;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .step.active {
-            color: #4f46e5;
-        }
-
-        .step-circle {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-        }
-
-        .step.active .step-circle {
-            background: #4f46e5;
-            color: white;
-            box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
-        }
-
-        .step-line {
-            width: 40px;
-            height: 3px;
-            background: #e2e8f0;
-            border-radius: 2px;
-        }
-
-        /* Inputs con Iconos */
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-wrapper span.icon {
-            position: absolute;
-            left: 15px;
-            font-size: 1.1rem;
-            color: #64748b;
-            pointer-events: none;
-        }
-
-        .grupo-form input, .grupo-form select {
-            padding-left: 45px !important;
-        }
-    </style>
 </head>
+
 <body class="admin-body">
 
-    <!-- Menú Lateral -->
     <aside class="sidebar" aria-label="Menú de Navegación">
         <div class="sidebar-brand">
-            <span class="brand-icon" aria-hidden="true">🫀</span>
+            <img src="{% static 'img/ritmo-cardiaco.png' %}" alt="Icono frecuencia" class="nav-icon-custom">
+
             <div class="brand-text">
                 <h2>CardioCliente</h2>
                 <span class="brand-subtitle">Mi Perfil Inteligente</span>
             </div>
         </div>
         <nav class="sidebar-nav">
-            <a href="form1.html" class="nav-item activo">
-                <span class="nav-icon">👤</span>
+            <a href="/formulario_uno/" class="nav-item activo">
+                <img src="{% static 'img/informacion-personal.png' %}" alt="Icono información personal"
+                    class="nav-icon-custom">
+
                 <span>Datos Personales</span>
             </a>
-            <a href="form2.html" class="nav-item">
-                <span class="nav-icon">📊</span>
+            <a href="/formulario_dos/" class="nav-item">
+                <img src="{% static 'img/estilo-de-vida.png' %}" alt="Icono estilo de vida" class="nav-icon-custom">
                 <span>Estilo de Vida</span>
             </a>
-            <a href="sensor.html" class="nav-item">
-                <span class="nav-icon">🫀</span>
+            <a href="/sensor/" class="nav-item">
+                <img src="{% static 'img/medir-estres.png' %}" alt="Icono sensor de estrés" class="nav-icon-custom">
                 <span>Sensor de Estrés</span>
             </a>
         </nav>
         <div class="sidebar-footer">
             <button type="button" class="btn-salir-sidebar" onclick="cerrarSesion()">
-                <span>🚪</span> Salir
+                <span>Cerrar Sesión</span>
             </button>
         </div>
     </aside>
@@ -117,15 +56,14 @@
                 <span>Calibración de Perfil Iniciada</span>
             </div>
             <div class="user-profile-info">
-                <span class="avatar-circle">TP</span>
-                <span class="user-name">Paciente Nuevo</span>
+                <span class="avatar-circle" id="avatarUsuario">TP</span>
+                <span class="user-name" id="nombreUsuario">Paciente Nuevo</span>
             </div>
         </header>
 
         <main class="dashboard-content">
             <div class="tarjeta-panel tarjeta-perfil-centrada">
-                
-                <!-- Stepper Visual -->
+
                 <div class="stepper-container">
                     <div class="step active">
                         <div class="step-circle">1</div>
@@ -145,27 +83,26 @@
 
                 <div class="form-header-title">
                     <h2>Datos Biométricos</h2>
-                    <p class="section-desc">Ingresa tu información fisiológica básica para ajustar el algoritmo de IA.</p>
+                    <p class="section-desc">Ingresa tu información fisiológica básica para ajustar el algoritmo de IA.
+                    </p>
                 </div>
 
                 <form id="formPerfilPaciente" novalidate>
                     <div class="grid-formulario-dos">
                         <div class="grupo-form">
+                            <br>
                             <label for="edad">Edad Biológica</label>
                             <div class="input-wrapper">
-                                <span class="icon">🎂</span>
                                 <input type="number" id="edad" placeholder="Ej. 25" required autocomplete="off">
                             </div>
                         </div>
                         <div class="grupo-form">
                             <label for="genero">Género</label>
                             <div class="input-wrapper">
-                                <span class="icon">🚻</span>
                                 <select id="genero" required class="select-personalizado">
                                     <option value="" disabled selected>Seleccione...</option>
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="Femenino">Femenino</option>
-                                    <option value="Otro">Otro</option>
+                                    <option value="Male">Masculino</option>
+                                    <option value="Female">Femenino</option>
                                 </select>
                             </div>
                         </div>
@@ -174,15 +111,23 @@
                     <div class="grupo-form">
                         <label for="ocupacion">Ocupación / Profesión (Contexto de Estrés)</label>
                         <div class="input-wrapper">
-                            <span class="icon">💼</span>
                             <select id="ocupacion" required class="select-personalizado">
-                                <option value="" disabled selected>Seleccione su área principal...</option>
-                                <option value="Estudiante">Estudiante Universitario</option>
-                                <option value="Ingeniero">Ingeniería / Tecnología</option>
-                                <option value="Doctor">Sector Salud (Doctor/Enfermero)</option>
-                                <option value="Administrativo">Sector Administrativo / Oficina</option>
-                                <option value="Operativo">Trabajo Físico / Operativo</option>
-                                <option value="Otro">Otro sector</option>
+                                </option>
+
+                                <option value="Student">Estudiante</option>
+                                <option value="Software Engineer">Ingeniero de software</option>
+                                <option value="Doctor">Doctor</option>
+                                <option value="Teacher">Profesor</option>
+                                <option value="Sales Representative">Representante de ventas</option>
+                                <option value="Accountant">Contador</option>
+                                <option value="Nurse">Enfermero</option>
+                                <option value="Engineer">Ingeniero</option>
+                                <option value="Scientist">Científico</option>
+                                <option value="Lawyer">Abogado</option>
+                                <option value="Manager">Gerente</option>
+                                <option value="Salesperson">Vendedor</option>
+                                <option value="Other">Otro sector</option>
+
                             </select>
                         </div>
                     </div>
@@ -191,21 +136,21 @@
                         <div class="grupo-form">
                             <label for="peso">Peso (kg)</label>
                             <div class="input-wrapper">
-                                <span class="icon">⚖️</span>
-                                <input type="number" step="0.1" id="peso" placeholder="Ej. 70.5" required autocomplete="off">
+                                <input type="number" step="0.1" id="peso" placeholder="Ej. 70.5" required
+                                    autocomplete="off">
                             </div>
                         </div>
                         <div class="grupo-form">
                             <label for="estatura">Estatura (m)</label>
                             <div class="input-wrapper">
-                                <span class="icon">📏</span>
-                                <input type="number" step="0.01" id="estatura" placeholder="Ej. 1.72" required autocomplete="off">
+                                <input type="number" step="0.01" id="estatura" placeholder="Ej. 1.72" required
+                                    autocomplete="off">
                             </div>
                         </div>
                     </div>
 
-                    <button type="button" onclick="window.location.href='form2.html'" class="btn-primario btn-lg" style="margin-top: 10px;">
-                        Guardar y Continuar al Paso 2 ➔
+                    <button type="submit" class="btn-primario btn-lg" style="margin-top: 10px;">
+                        Guardar y Continuar
                     </button>
                 </form>
 
@@ -214,6 +159,10 @@
         </main>
     </div>
 
-    <script src="../Js/form1.js"></script>
+    <div id="toast-container"></div>
+
+    <script src="{% static 'Js/form1.js' %}"></script>
+
 </body>
+
 </html>

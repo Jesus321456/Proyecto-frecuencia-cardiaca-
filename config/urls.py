@@ -21,11 +21,15 @@ from django.views.generic import RedirectView,  TemplateView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("login/", LoginView.as_view(template_name="login.html"), name="login"),
-    path("registro/", TemplateView.as_view(template_name="registro.html"), name="registro"),
+    path('', TemplateView.as_view(template_name="index.html"), name="inicio"),
+    path("login/", LoginView.as_view( template_name="login.html", redirect_authenticated_user=True,),name="login"),    path("registro/", TemplateView.as_view(template_name="registro.html"), name="registro"),
     path("panel_admin/", TemplateView.as_view(template_name="panel_admin.html"), name="panel_admin"),
+    path("formulario_uno/", TemplateView.as_view(template_name="form1.html"), name="formulario_uno"),
+    path("formulario_dos/", TemplateView.as_view(template_name="form2.html"), name="formulario_dos"),
+    path("sensor/", TemplateView.as_view(template_name="sensor.html"), name="sensor"),
+    path("resultado/", TemplateView.as_view(template_name="resultado.html"), name="resultado"),
     path("logout/", LogoutView.as_view(), name="logout"),
-    path('', RedirectView.as_view(url='/login/', permanent=False)),
+    
 
     path("api/", include("catalogo.urls")),
     path("auth/", include("usuarios.urls")),

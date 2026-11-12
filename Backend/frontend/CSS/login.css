@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -7,21 +6,55 @@
 }
 
 body {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+    color: #f8fafc;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    position: relative;
+    overflow: hidden; 
 }
 
+body::before {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: rgba(79, 70, 229, 0.4); 
+    border-radius: 50%;
+    top: -100px;
+    left: -100px;
+    filter: blur(100px);
+    z-index: 0;
+}
+
+body::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(225, 29, 72, 0.4); 
+    border-radius: 50%;
+    bottom: 100px;
+    right: -50px;
+    filter: blur(100px);
+    z-index: 0;
+}
+
+/* ✅ Card en modo "glass" (acorde al landing) */
 .login-container {
     width: 100%;
     max-width: 420px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
     padding: 40px 35px;
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
 }
 
 .login-header {
@@ -32,13 +65,13 @@ body {
 .login-header h2 {
     font-size: 26px;
     font-weight: 600;
-    color: #1e1e2f;
+    color: #f8fafc;
     margin-bottom: 6px;
 }
 
 .login-header p {
     font-size: 13px;
-    color: #6c757d;
+    color: #94a3b8; /* --text-muted */
 }
 
 .form-group {
@@ -49,7 +82,7 @@ body {
     display: block;
     font-size: 13px;
     font-weight: 500;
-    color: #495057;
+    color: #cbd5e1;
     margin-bottom: 8px;
 }
 
@@ -57,17 +90,22 @@ body {
     width: 100%;
     padding: 12px 16px;
     border-radius: 10px;
-    border: 1px solid #d1d5db;
-    background: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    color: #f8fafc;
     font-size: 14px;
     transition: all 0.2s ease;
 }
 
+.form-group input::placeholder {
+    color: #64748b;
+}
+
 .form-group input:focus {
-    border-color: #2575fc;
+    border-color: #818cf8;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.15);
-    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.25);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 /* Botones */
@@ -87,28 +125,32 @@ body {
     font-size: 15px;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-family: inherit;
 }
 
 .btn-primario {
-    background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
     border: none;
+    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
 }
 
 .btn-primario:hover {
-    opacity: 0.95;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(79, 70, 229, 0.6);
 }
 
 .btn-secundario {
-    background: #ffffff;
-    color: #2575fc;
-    border: 1px solid #2575fc;
+    background: rgba(255, 255, 255, 0.05);
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
 }
 
 .btn-secundario:hover {
-    background: #f0f4ff;
+    background: #f8fafc;
+    color: #0f172a;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
 #mensaje {
@@ -117,4 +159,5 @@ body {
     text-align: center;
     font-weight: 500;
     min-height: 20px;
+    color: #fda4af;
 }

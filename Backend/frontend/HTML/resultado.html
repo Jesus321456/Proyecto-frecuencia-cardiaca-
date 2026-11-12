@@ -1,3 +1,4 @@
+{% load static %} 
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,13 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado del Diagnóstico - CardioCliente</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../CSS/app.css">
+    <link rel="stylesheet" href="{% static 'CSS/app.css' %}">  
     <style>
-        /* ==========================================
-           Estilos Súper Premium y Coloridos
-           ========================================== */
         
-        /* Luces de ambiente (Neón) para dar color al fondo oscuro */
         body {
             position: relative;
             overflow-x: hidden;
@@ -80,9 +77,9 @@
     margin: 10px 0;
     background: linear-gradient(135deg, #a78bfa, #f472b6, #38bdf8);
     -webkit-background-clip: text;
-    background-clip: text; /* <--- Solución al aviso */
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: transparent; /* <--- Buena práctica complementaria */
+    color: transparent; 
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
         #txtTipoEstres {
@@ -91,7 +88,6 @@
             font-weight: 500;
         }
 
-        /* Cuadrícula de Métricas a Color */
         .metricas-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -113,7 +109,6 @@
             transform: translateY(-5px);
         }
 
-        /* Colores específicos para cada métrica */
         .metrica-bpm {
             background: rgba(225, 29, 72, 0.05);
             border: 1px solid rgba(225, 29, 72, 0.3);
@@ -147,7 +142,6 @@
             font-weight: 800;
         }
 
-        /* Botones Vibrantes */
         .botones-accion {
             display: flex;
             gap: 15px;
@@ -156,9 +150,9 @@
 
         .btn-outline-light {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(80, 26, 26, 0.1); 
+            color: #03112493;
+            border: 1px solid rgba(34, 10, 10, 0.562);
             padding: 16px;
             border-radius: 12px;
             font-weight: 600;
@@ -188,19 +182,12 @@
 </head>
 <body class="evaluacion-body">
 
-    <!-- Luces de Neón en el Fondo -->
     <div class="luz-fondo-1"></div>
     <div class="luz-fondo-2"></div>
 
-    <header class="evaluacion-header">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.8rem;">✨</span>
-            <h2 class="titulo-pagina">Diagnóstico Inteligente</h2>
-        </div>
-        <button type="button" class="btn-salir" onclick="cerrarSesion()">Cerrar Sesión</button>
-    </header>
-
+    
     <main class="evaluacion-container">
+        <br>
         <div class="tarjeta-glass-evaluacion" style="text-align: center; border-radius: 24px;">
             
             <div class="tarjeta-titulos">
@@ -216,31 +203,33 @@
             </div>
 
             <div class="metricas-grid">
-                <!-- Tarjeta Colorida para BPM -->
                 <div class="metrica-item metrica-bpm">
                     <span class="metrica-label">❤️ BPM Promedio</span>
                     <strong class="metrica-valor" id="valBPM">--</strong>
                 </div>
-                <!-- Tarjeta Colorida para HRV -->
                 <div class="metrica-item metrica-hrv">
                     <span class="metrica-label">⚡ Estimación HRV</span>
                     <strong class="metrica-valor" id="valHRV">Analizando</strong>
                 </div>
             </div>
 
-            <div class="botones-accion">
-                <button type="button" class="btn-outline-light" onclick="window.location.href='form1.html'">
-                    ↻ Nueva Evaluación
+
+             <div class="botones-accion">
+                <button type="button" class="btn-outline-light" onclick="nuevaEvaluacion()">
+                     Nueva Evaluación
                 </button>
+                
                 <button type="button" class="btn-guardar-sensor" style="flex: 1; margin: 0; padding: 16px; border-radius: 12px;" onclick="cerrarSesion()">
-                    Finalizar y Guardar ✓
+                    Finalizar y Guardar 
                 </button>
+               </div>
             </div>
 
             <div id="msjResultado" class="alerta" style="margin-top: 15px; display: none;"></div>
         </div>
     </main>
 
-    <script src="../Js/resultado.js?v=2"></script>
+    <script src="{% static 'Js/resultado.js' %}"></script> 
+
 </body>
 </html>

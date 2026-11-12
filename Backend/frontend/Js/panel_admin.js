@@ -1,8 +1,4 @@
-// ============================================================
-// panel_admin.js — versión completa y funcional
-// ============================================================
 
-// --- Helper CSRF (cookie con fallback a <meta>) ---
 function getCookie(name) {
     const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
     if (m) return m.pop();
@@ -39,7 +35,6 @@ function inyectarUI() {
         document.body.appendChild(dlg);
     }
 
-    // Modal de edición de tipos de estrés
      if (!document.getElementById('modalEditarEstres')) {
         const dlg = document.createElement('dialog');
         dlg.id = 'modalEditarEstres';
@@ -454,7 +449,6 @@ async function eliminarCliente(idCliente) {
 
 
 async function eliminarAdmin(idAdmin, username) {
-    // Admin local (solo en localStorage)
     if (idAdmin === null || idAdmin === undefined) {
         const ok = await confirmarBorrado(
             `¿Ocultar a ${username}?`,
@@ -498,29 +492,49 @@ async function eliminarAdmin(idAdmin, username) {
     }
 }
 
-
-function verHistorial(idCliente, nombreCliente) {
+async function verHistorial(idCliente, nombreCliente) {
     document.getElementById('tituloHistorial').textContent = `Historial de: ${nombreCliente}`;
     document.getElementById('seccionHistorial').style.display = 'block';
 
     const tbody = document.querySelector('#tablaHistorial tbody');
-    tbody.innerHTML = '';
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Cargando historial desde el servidor...</td></tr>`;
 
-    const hoy = new Date();
-    const fechaFormateada = hoy.toLocaleDateString() + " " + hoy.toLocaleTimeString();
+    try {
+        // Pedimos los datos reales a Django
+        const response = await fetch(`/evaluaciones/historial/${idCliente}/`, { cache: 'no-store' });
+        
+        if (!response.ok) {
+            throw new Error("No se pudo obtener el historial.");
+        }
 
-    tbody.innerHTML += `
-        <tr>
-            <td>${fechaFormateada}</td>
-            <td>75 BPM</td>
-            <td style="color: #f59e0b;"><strong>Medio (Simulado)</strong></td>
-        </tr>
-        <tr>
-            <td>Ayer 10:30 AM</td>
-            <td>80 BPM</td>
-            <td style="color: #ef4444;"><strong>Alto (Simulado)</strong></td>
-        </tr>
-    `;
+        const historial = await response.json();
+        tbody.innerHTML = '';
+
+        if (historial.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Este paciente no tiene evaluaciones registradas.</td></tr>`;
+            return;
+        }
+
+        // Pintamos los datos en la tabla
+        historial.forEach(item => {
+            let claseNivel = "bajo";
+            if (item.nivel === "Medio") claseNivel = "medio";
+            if (item.nivel === "Alto") claseNivel = "alto";
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.fecha}</td>
+                    <td>${item.bpm !== 'N/A' ? item.bpm + ' BPM' : 'N/A'}</td>
+                    <td>${item.rmssd !== 'N/A' ? item.rmssd + ' ms' : 'N/A'}</td>
+                    <td><span class="badge-estres ${claseNivel}">${item.nivel}</span></td>
+                </tr>
+            `;
+        });
+
+    } catch (error) {
+        console.error(error);
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">Error al cargar el historial.</td></tr>`;
+    }
 }
 
 function cerrarHistorial() {

@@ -1,0 +1,68 @@
+.stepper-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .step.active {
+            color: #4f46e5;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .step.active .step-circle {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .step-line {
+            width: 40px;
+            height: 3px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        /* Inputs con Iconos */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper span.icon {
+            position: absolute;
+            left: 15px;
+            font-size: 1.1rem;
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        .grupo-form input, .grupo-form select {
+            padding-left: 45px !important;
+        }

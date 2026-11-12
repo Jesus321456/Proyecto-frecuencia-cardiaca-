@@ -13,8 +13,8 @@ from catalogo.models import TipoEstres
 from .models import Evaluacion, Diagnostico, MedicionFisiologica
 from bleak import BleakClient
 
-RUTA_MODELO = os.path.join(settings.BASE_DIR, 'Backend/backend/modelos/modelo_random_forest.joblib')
-RUTA_COLUMNAS = os.path.join(settings.BASE_DIR, 'Backend/backend/modelos/columnas_modelo.joblib')
+RUTA_MODELO = os.path.join(settings.BASE_DIR, 'Backend/backend/Modelo/modelo_random_forest.joblib')
+RUTA_COLUMNAS = os.path.join(settings.BASE_DIR, 'Backend/backend/Modelo/columnas_modelo.joblib')
 
 
 if sys.platform == 'win32':
