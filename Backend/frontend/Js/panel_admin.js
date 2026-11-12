@@ -16,19 +16,13 @@ window.addEventListener('DOMContentLoaded', () => {
     cargarDatosCompletos();
 });
 
-// ============================================================
-// UI: Toast + Modales (se inyectan una sola vez al cargar)
-// ============================================================
-
 function inyectarUI() {
-    // Contenedor de toasts
     if (!document.getElementById('toast-container')) {
         const tc = document.createElement('div');
         tc.id = 'toast-container';
         document.body.appendChild(tc);
     }
 
-    // Modal de confirmación
     if (!document.getElementById('modalConfirm')) {
         const dlg = document.createElement('dialog');
         dlg.id = 'modalConfirm';

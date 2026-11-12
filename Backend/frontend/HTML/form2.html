@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paso 2: Estilo de Vida - CardioCliente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/app.css">
+    <style>
+        /* Estilos del stepper y los íconos */
+        .stepper-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .step.active { color: #4f46e5; }
+        .step.completed { color: #10b981; }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .step.active .step-circle {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .step.completed .step-circle {
+            background: #10b981;
+            color: white;
+        }
+
+        .step-line {
+            width: 40px;
+            height: 3px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        .step-line.completed { background: #10b981; }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper span.icon {
+            position: absolute;
+            left: 15px;
+            font-size: 1.1rem;
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        .grupo-form input, .grupo-form select {
+            padding-left: 45px !important;
+        }
+    </style>
+</head>
+<body class="admin-body">
+
+    <!-- Menú Lateral -->
+    <aside class="sidebar" aria-label="Menú de Navegación">
+        <div class="sidebar-brand">
+            <span class="brand-icon" aria-hidden="true">🫀</span>
+            <div class="brand-text">
+                <h2>CardioCliente</h2>
+                <span class="brand-subtitle">Mi Perfil Inteligente</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="form1.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span>Datos Personales</span>
+            </a>
+            <a href="form2.html" class="nav-item activo">
+                <span class="nav-icon">📊</span>
+                <span>Estilo de Vida</span>
+            </a>
+            <a href="sensor.html" class="nav-item">
+                <span class="nav-icon">🫀</span>
+                <span>Sensor de Estrés</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button type="button" class="btn-salir-sidebar" onclick="cerrarSesion()">
+                <span>🚪</span> Salir
+            </button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-navbar">
+            <div id="indicadorRol" class="user-role-badge">
+                <span class="pulse-dot"></span>
+                <span>Calibración de Perfil Iniciada</span>
+            </div>
+            <div class="user-profile-info">
+                <span class="avatar-circle">TP</span>
+                <span class="user-name">Paciente Nuevo</span>
+            </div>
+        </header>
+
+        <main class="dashboard-content">
+            <div class="tarjeta-panel tarjeta-perfil-centrada">
+                
+                <!-- Stepper Visual (Paso 2) -->
+                <div class="stepper-container">
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <span>Biometría</span>
+                    </div>
+                    <div class="step-line completed"></div>
+                    <div class="step active">
+                        <div class="step-circle">2</div>
+                        <span>Hábitos</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <div class="step-circle">3</div>
+                        <span>Análisis</span>
+                    </div>
+                </div>
+
+                <div class="form-header-title">
+                    <h2>Estilo de Vida</h2>
+                    <p class="section-desc">Estos factores alteran la Variabilidad de Frecuencia Cardíaca (HRV).</p>
+                </div>
+
+                <form id="formEstiloVida" novalidate>
+                    
+                    <!-- Fila 1: Horas de sueño (AHORA CON EL ID CORRECTO: horas_sueno) -->
+                    <div class="grupo-form">
+                        <label for="horas_sueno">Horas promedio de sueño</label>
+                        <div class="input-wrapper">
+                            <span class="icon">💤</span>
+                            <input type="number" step="0.1" id="horas_sueno" placeholder="Ej. 7.5" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- Fila 2: Calidad de sueño (ID: calidad_sueno) -->
+                    <div class="grupo-form">
+                        <label for="calidad_sueno">Calidad de sueño (del 1 al 10)</label>
+                        <div class="input-wrapper">
+                            <span class="icon">⭐</span>
+                            <input type="number" min="1" max="10" id="calidad_sueno" placeholder="Ej. 8" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- Fila 3: Actividad física (ID: nivel_actividad) -->
+                    <div class="grupo-form">
+                        <label for="nivel_actividad">Tiempo de actividad física (minutos)</label>
+                        <div class="input-wrapper">
+                            <span class="icon">🏃</span>
+                            <input type="number" id="nivel_actividad" placeholder="Ej. 30" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- Fila 4: Trastorno de sueño (ID: trastorno_sueno) -->
+                    <div class="grupo-form">
+                        <label for="trastorno_sueno">¿Tiene trastorno de sueño?</label>
+                        <div class="input-wrapper">
+                            <span class="icon">🌙</span>
+                            <select id="trastorno_sueno" required class="select-personalizado">
+                                <option value="" disabled selected>Selecciona...</option>
+                                <option value="None">No (None)</option>
+                                <option value="Insomnia">Sí (Insomnia)</option>
+                                <option value="Sleep Apnea">Sí (Sleep Apnea)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Fila 5: Pasos diarios (ID: pasos_diarios) -->
+                    <div class="grupo-form">
+                        <label for="pasos_diarios">Pasos diarios promedio</label>
+                        <div class="input-wrapper">
+                            <span class="icon">👟</span>
+                            <input type="number" id="pasos_diarios" placeholder="Ej. 8000" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- Fila 6: Presión arterial (ID: presion_arterial) -->
+                    <div class="grupo-form">
+                        <label for="presion_arterial">Presión arterial (Ej. 120/80)</label>
+                        <div class="input-wrapper">
+                            <span class="icon">❤️</span>
+                            <input type="text" id="presion_arterial" placeholder="Ej. 120/80" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 15px;">
+                        <button type="button" onclick="window.location.href='form1.html'" class="btn-secundario" style="width: 30%; border-radius: 10px;">
+                            ← Atrás
+                        </button>
+                        <!-- CORRECCIÓN: Ahora es type="submit" para que guarde en Django -->
+                        <button type="submit" class="btn-primario btn-lg" style="width: 70%;">
+                            Enviar y Continuar 🫀
+                        </button>
+                    </div>
+                </form>
+
+                <div id="msjSensor" class="alerta" role="alert" style="display:none; margin-top: 15px;"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../Js/form2.js"></script>
+</body>
+</html>
