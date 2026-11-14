@@ -2,6 +2,7 @@ let dispositivoBluetooth = null;
 let bpmActual = 0; 
 
 document.addEventListener('DOMContentLoaded', () => {
+     verificarRolUsuario();
     if (!document.getElementById('toast-container')) {
         const tc = document.createElement('div');
         tc.id = 'toast-container';
@@ -17,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 async function iniciarMedicionReal() {
-    // Verificamos soporte de Bluetooth
     if (!navigator.bluetooth) {
         toastError("Tu navegador no soporta Bluetooth o no estás en un entorno seguro (HTTPS).");
         return;
@@ -152,6 +152,25 @@ function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
         toast.classList.remove('mostrar');
         toast.addEventListener('transitionend', () => toast.remove(), { once: true });
     }, duracion);
+}
+
+function verificarRolUsuario() {
+    const idUsuario = localStorage.getItem('id_usuario');
+    const nombre = localStorage.getItem('nombre') || 'Paciente';
+
+    if (!idUsuario) {
+        console.warn("No hay sesión activa. Redirigiendo al login...");
+        window.location.href = '/login/'; 
+        return; 
+    }
+
+    const elementoNombre = document.getElementById('nombreUsuario');
+    const elementoAvatar = document.getElementById('avatarUsuario');
+
+    if (elementoNombre && elementoAvatar) {
+        elementoNombre.textContent = nombre;
+        elementoAvatar.textContent = nombre.substring(0, 2).toUpperCase(); 
+    }
 }
 
 function toastExito(msg) { mostrarToast(msg, 'exito'); }

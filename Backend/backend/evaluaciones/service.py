@@ -84,7 +84,7 @@ def predecir_y_actualizar_evaluacion(evaluacion_id):
         medicion = evaluacion.mediciones.first() 
         
         if not medicion:
-            return None, "No hay medición fisiológica para esta evaluación."
+            return None, None, None, "No hay medición fisiológica para esta evaluación."
 
         datos_random = {
             'Gender': cliente.genero,
@@ -119,7 +119,6 @@ def predecir_y_actualizar_evaluacion(evaluacion_id):
         
         if tipo_estres_obj:
             generar_diagnostico(evaluacion.id, tipo_estres_obj.id_nivel_estres)
-            # Extraemos el texto del campo "tipo_estres" del objeto
             tipo_estres_texto = tipo_estres_obj.tipo_estres 
                 
         return prediccion, nivel_texto, tipo_estres_texto, None

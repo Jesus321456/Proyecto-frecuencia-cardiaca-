@@ -54,7 +54,6 @@ body.admin-body {
     color: #8a8d93;
 }
 
-/* Navegación del Sidebar */
 .sidebar-nav {
     padding: 20px 15px;
     display: flex;
@@ -586,32 +585,28 @@ dialog.modal-custom .modal-acciones {
     margin-top: 24px;
 }
 
- /* Animación de carga circular (opcional, si aún la prefieres en lugar del corazón) */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* =========================================
-           ANIMACIÓN DE ELECTROCARDIOGRAMA (ECG)
-           ========================================= */
+    
         .ecg-sensor-container {
             width: 100%;
             height: 60px;
-            margin: 10px auto 25px; /* Margen ajustado para quedar pegado a los BPM */
-            opacity: 0.9;
+            margin: 10px auto 25px; 
         }
 
         .ecg-line {
             fill: none;
-            stroke: #e11d48; /* Carmesí vibrante */
+            stroke: #e11d48; 
             stroke-width: 3;
             stroke-linecap: round;
             stroke-linejoin: round;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
             animation: drawECG 3s linear infinite;
-            filter: drop-shadow(0 0 8px rgba(225, 29, 72, 0.4)); /* Resplandor rojo */
+            filter: drop-shadow(0 0 8px rgba(225, 29, 72, 0.4)); 
         }
 
         @keyframes drawECG {

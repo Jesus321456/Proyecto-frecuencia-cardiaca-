@@ -1,41 +1,74 @@
 from django.contrib.auth import authenticate, get_user_model
 from django.db import transaction
+from django.db import IntegrityError
 from .models import Administrador, Cliente
 
 Usuario = get_user_model()
 
 
+class UsuarioDuplicadoError(Exception):
+    def __init__(self, campo, mensaje):
+        self.campo = campo        
+        self.mensaje = mensaje
+        super().__init__(mensaje)
+
+
+def _validar_unicidad(username, email):
+    if Usuario.objects.filter(username__iexact=username).exists():
+        raise UsuarioDuplicadoError(
+            'username',
+            'Ese nombre de usuario ya está en uso. Por favor elige otro.'
+        )
+    if Usuario.objects.filter(email__iexact=email).exists():
+        raise UsuarioDuplicadoError(
+            'email',
+            'Ese correo ya está registrado. Por favor usa otro.'
+        )
+
+
 def crear_administrador(username, email, password, nombre):
-    with transaction.atomic():
-        
-        nuevo_usuario = Usuario.objects.create_user(
-            username=username,
-            email=email,
-            password=password
+    _validar_unicidad(username, email)
+
+    try:
+        with transaction.atomic():
+            nuevo_usuario = Usuario.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+            nuevo_admin = Administrador.objects.create(
+                usuario=nuevo_usuario,
+                nombre=nombre
+            )
+            return nuevo_admin
+    except IntegrityError:
+        raise UsuarioDuplicadoError(
+            'username',
+            'El usuario o correo ya existe. Intenta con otros datos.'
         )
-        
-        nuevo_admin = Administrador.objects.create(
-            usuario=nuevo_usuario,
-            nombre=nombre
-        )
-        
-        return nuevo_admin
+
 
 def crear_cliente(username, email, password, nombre):
-    with transaction.atomic():
-        
-        nuevo_usuario = Usuario.objects.create_user(
-            username=username,
-            email=email,
-            password=password
+    _validar_unicidad(username, email)
+
+    try:
+        with transaction.atomic():
+            nuevo_usuario = Usuario.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+            nuevo_cliente = Cliente.objects.create(
+                usuario=nuevo_usuario,
+                nombre=nombre
+            )
+            return nuevo_cliente
+    except IntegrityError:
+        raise UsuarioDuplicadoError(
+            'username',
+            'El usuario o correo ya existe. Intenta con otros datos.'
         )
-        
-        nuevo_cliente = Cliente.objects.create(
-            usuario=nuevo_usuario,
-            nombre=nombre
-        )
-        
-        return nuevo_cliente
+    
 
 def obtener_todos_los_clientes():
     return Cliente.objects.all()

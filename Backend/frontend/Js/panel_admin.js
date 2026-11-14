@@ -500,7 +500,6 @@ async function verHistorial(idCliente, nombreCliente) {
     tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Cargando historial desde el servidor...</td></tr>`;
 
     try {
-        // Pedimos los datos reales a Django
         const response = await fetch(`/evaluaciones/historial/${idCliente}/`, { cache: 'no-store' });
         
         if (!response.ok) {
@@ -515,7 +514,6 @@ async function verHistorial(idCliente, nombreCliente) {
             return;
         }
 
-        // Pintamos los datos en la tabla
         historial.forEach(item => {
             let claseNivel = "bajo";
             if (item.nivel === "Medio") claseNivel = "medio";

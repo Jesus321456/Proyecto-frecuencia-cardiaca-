@@ -31,7 +31,7 @@
         <p class="hero-subtitle">Conecta tu banda cardíaca GEOID HS500 vía Bluetooth, analiza tus signos vitales con nuestro modelo Random Forest y descubre tu nivel de estrés al instante.</p>
         
        <a href="{% url 'login' %}" class="btn-hero">
-            Comenzar Análisis <span style="font-size: 1.2rem;">🚀</span>
+            Comenzar Análisis 
         </a>
 
         <div class="ecg-container">
@@ -64,17 +64,18 @@
 
     <section class="features-section">
         <div class="feature-card">
-            <span class="feature-icon">📡</span>
+            <img src="{% static 'img/bluethooth.png' %}" alt="Icono bluethooth" class="feature-icon">
             <h3>Web Bluetooth</h3>
             <p>Conexión directa desde el navegador con tu sensor cardíaco, sin intermediarios ni descargas adicionales.</p>
         </div>
         <div class="feature-card">
-            <span class="feature-icon">🧠</span>
+            <img src="{% static 'img/maquina.png' %}" alt="Icono machine learning" class="feature-icon"> 
             <h3>Machine Learning</h3>
             <p>Algoritmos de Random Forest que procesan la variabilidad de tu frecuencia cardíaca (HRV) para predecir el estrés.</p>
         </div>
         <div class="feature-card">
-            <span class="feature-icon">📊</span>
+            <img src="{% static 'img/historial.png' %}" alt="Icono historial" class="feature-icon">
+            <br>
             <h3>Historial Clínico</h3>
             <p>Almacenamiento seguro de tus evaluaciones. Visualiza tendencias y protege tu salud a largo plazo.</p>
         </div>
