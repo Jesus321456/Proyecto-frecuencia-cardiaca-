@@ -6,11 +6,15 @@ function getCookie(name) {
     return meta ? meta.getAttribute('content') : '';
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
     inyectarUI();
-    verificarRolUsuario();
+
+    const usuario = await verificarSesionAdmin();
+    if (!usuario) return;   
+
     cargarDatosCompletos();
 });
+
 
 function inyectarUI() {
     if (!document.getElementById('toast-container')) {
@@ -35,7 +39,7 @@ function inyectarUI() {
         document.body.appendChild(dlg);
     }
 
-     if (!document.getElementById('modalEditarEstres')) {
+    if (!document.getElementById('modalEditarEstres')) {
         const dlg = document.createElement('dialog');
         dlg.id = 'modalEditarEstres';
         dlg.className = 'modal-custom';
@@ -46,17 +50,17 @@ function inyectarUI() {
             </div>
             <form id="formEditarEstres">
                 <input type="hidden" id="editIdEstres">
-                
+
                 <div class="grupo-form">
                     <label for="editNivel">Nivel de Estrés</label>
                     <input type="text" id="editNivel" required autocomplete="off">
                 </div>
-                
+
                 <div class="grupo-form">
                     <label for="editTipo">Tipo de Estrés</label>
                     <input type="text" id="editTipo" required autocomplete="off">
                 </div>
-                
+
                 <div class="modal-acciones">
                     <button type="button" id="btnCancelarEdit" class="btn btn-secundario">Cancelar</button>
                     <button type="submit" class="btn btn-primario">Guardar Cambios</button>
@@ -64,13 +68,13 @@ function inyectarUI() {
             </form>
         `;
         document.body.appendChild(dlg);
-        
+
         document.getElementById('btnCerrarModalEdit').onclick = () => dlg.close();
         document.getElementById('btnCancelarEdit').onclick = () => dlg.close();
         document.getElementById('formEditarEstres').addEventListener('submit', guardarEdicionEstres);
     }
-
 }
+
 
 function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
     const contenedor = document.getElementById('toast-container');
@@ -91,14 +95,16 @@ function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
 function toastExito(msg) { mostrarToast(msg, 'exito'); }
 function toastError(msg) { mostrarToast(msg, 'error'); }
 
+
+
 function confirmarBorrado(titulo, texto, textoAceptar = 'Sí, eliminar') {
     return new Promise(resolve => {
-        const modal  = document.getElementById('modalConfirm');
-        const btnOk  = document.getElementById('btnAceptar');
-        const btnNo  = document.getElementById('btnCancelar');
+        const modal = document.getElementById('modalConfirm');
+        const btnOk = document.getElementById('btnAceptar');
+        const btnNo = document.getElementById('btnCancelar');
 
         document.getElementById('modalTitulo').textContent = titulo;
-        document.getElementById('modalTexto').textContent  = texto;
+        document.getElementById('modalTexto').textContent = texto;
         btnOk.textContent = textoAceptar;
 
         const cerrar = (valor) => {
@@ -116,26 +122,48 @@ function confirmarBorrado(titulo, texto, textoAceptar = 'Sí, eliminar') {
 }
 
 
-function verificarRolUsuario() {
-    const rol = localStorage.getItem('rol_usuario') || 'Administrador';
-    const nombreAdmin = localStorage.getItem('nombre') || 'Admin';
+async function verificarSesionAdmin() {
+    try {
+        const res = await fetch('/auth/me/', { credentials: 'include' });
 
+        if (!res.ok) {
+            window.location.href = '/login/';
+            return null;
+        }
+
+        const data = await res.json();
+
+        if (data.rol !== 'Administrador') {
+            window.location.href = '/login/';
+            return null;
+        }
+
+        actualizarUIUsuario(data);
+        return data;
+    } catch (e) {
+        console.error('Error verificando sesión:', e);
+        window.location.href = '/login/';
+        return null;
+    }
+}
+
+function actualizarUIUsuario(usuario) {
     const indicador = document.getElementById('indicadorRol');
     if (indicador) {
-        const icono = rol.toLowerCase() === 'administrador'
-            ? '/static/img/administrador.png'
-            : '/static/img/paciente.png';
-        indicador.innerHTML = `<img src="${icono}" class="nav-icon-custom"> <span>Rol: ${rol.toUpperCase()}</span>`;
+        const icono = '/static/img/administrador.png';
+        indicador.innerHTML = `<img src="${icono}" class="nav-icon-custom"> <span>Rol: ${usuario.rol.toUpperCase()}</span>`;
     }
 
     const elementoNombre = document.getElementById('nombreUsuario');
     const elementoAvatar = document.getElementById('avatarUsuario');
 
     if (elementoNombre && elementoAvatar) {
-        elementoNombre.textContent = nombreAdmin;
-        elementoAvatar.textContent = nombreAdmin.substring(0, 2).toUpperCase();
+        elementoNombre.textContent = usuario.nombre;
+        elementoAvatar.textContent = usuario.nombre.substring(0, 2).toUpperCase();
     }
 }
+
+
 
 function obtenerAdminsLocales() {
     const admins = localStorage.getItem('lista_admins');
@@ -143,17 +171,26 @@ function obtenerAdminsLocales() {
 }
 
 function cargarDatosCompletos() {
-    fetch('/auth/administradores/', { cache: 'no-store' })
-        .then(res => res.json())
+    fetch('/auth/administradores/', { cache: 'no-store', credentials: 'include' })
+        .then(res => {
+            if (res.status === 403) {
+                toastError('No tienes permiso para ver administradores.');
+                return [];
+            }
+            return res.json();
+        })
         .then(admins => {
-            renderizarAdministradores(admins);
+            renderizarAdministradores(admins || []);
 
-            const nombresAdmins = admins.map(a => a.username.toLowerCase());
+            const nombresAdmins = (admins || []).map(a => a.username.toLowerCase());
 
-            fetch('/auth/clientes/', { cache: 'no-store' })
-                .then(res => res.json())
+            fetch('/auth/clientes/', { cache: 'no-store', credentials: 'include' })
+                .then(res => {
+                    if (res.status === 403) return [];
+                    return res.json();
+                })
                 .then(clientes => {
-                    const pacientesReales = clientes.filter(c => {
+                    const pacientesReales = (clientes || []).filter(c => {
                         const username = c.username.toLowerCase();
                         return !nombresAdmins.includes(username) &&
                                !username.includes('admin');
@@ -221,8 +258,11 @@ function renderizarAdministradores(admins) {
 }
 
 function cargarTiposEstres() {
-    fetch('/api/tipos-estres/', { cache: 'no-store' })
-        .then(res => res.json())
+    fetch('/api/tipos-estres/', { cache: 'no-store', credentials: 'include' })
+        .then(res => {
+            if (res.status === 403) return [];
+            return res.json();
+        })
         .then(data => {
             const tbody = document.querySelector('#tablaTiposEstres tbody');
             tbody.innerHTML = '';
@@ -258,8 +298,8 @@ function cargarTiposEstres() {
 
 function abrirEditarEstres(id, nivel, tipo) {
     document.getElementById('editIdEstres').value = id;
-    document.getElementById('editNivel').value    = nivel;
-    document.getElementById('editTipo').value     = tipo;
+    document.getElementById('editNivel').value = nivel;
+    document.getElementById('editTipo').value = tipo;
     document.getElementById('modalEditarEstres').showModal();
 }
 
@@ -268,7 +308,7 @@ async function guardarEdicionEstres(e) {
     const id = document.getElementById('editIdEstres').value;
     const datos = {
         nivel_estres: document.getElementById('editNivel').value.trim(),
-        tipo_estres:  document.getElementById('editTipo').value.trim()
+        tipo_estres: document.getElementById('editTipo').value.trim()
     };
 
     if (!datos.nivel_estres || !datos.tipo_estres) {
@@ -279,6 +319,7 @@ async function guardarEdicionEstres(e) {
     try {
         const res = await fetch(`/api/tipos-estres/actualizar/${id}/`, {
             method: 'PUT',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken'),
@@ -310,6 +351,7 @@ async function eliminarTipoEstres(idEstres) {
     try {
         const res = await fetch(`/api/tipos-estres/eliminar/${idEstres}/`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken'),
@@ -330,12 +372,11 @@ async function eliminarTipoEstres(idEstres) {
 }
 
 
-
 document.getElementById('formTipoEstres').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const nivel = document.getElementById('inputNivel').value.trim();
-    const tipo  = document.getElementById('inputTipo').value.trim();
+    const tipo = document.getElementById('inputTipo').value.trim();
 
     if (!nivel || !tipo) {
         toastError('Completa nivel y tipo antes de guardar.');
@@ -344,22 +385,23 @@ document.getElementById('formTipoEstres').addEventListener('submit', function (e
 
     fetch('/api/tipos-estres/crear/', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify({ nivel_estres: nivel, tipo_estres: tipo })
     })
-    .then(res => {
-        if (res.ok) {
-            toastExito('¡Tipo de estrés guardado!');
-            document.getElementById('formTipoEstres').reset();
-            cargarTiposEstres();
-        } else {
-            return res.json().then(err => { throw new Error(err.error || 'Error al guardar'); });
-        }
-    })
-    .catch(err => toastError('Error: ' + err.message));
+        .then(res => {
+            if (res.ok) {
+                toastExito('¡Tipo de estrés guardado!');
+                document.getElementById('formTipoEstres').reset();
+                cargarTiposEstres();
+            } else {
+                return res.json().then(err => { throw new Error(err.error || 'Error al guardar'); });
+            }
+        })
+        .catch(err => toastError('Error: ' + err.message));
 });
 
 document.getElementById('formNuevoUsuario').addEventListener('submit', function (e) {
@@ -387,33 +429,34 @@ document.getElementById('formNuevoUsuario').addEventListener('submit', function 
 
     fetch(endpoint, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify(datos)
     })
-    .then(res => res.json().then(data => ({ status: res.status, body: data })))
-    .then(res => {
-        if (res.status === 201 || res.status === 200) {
-            if (rol === 'administrador') {
-                let adminsLocales = obtenerAdminsLocales();
-                adminsLocales.push(usernameInput.toLowerCase());
-                localStorage.setItem('lista_admins', JSON.stringify(adminsLocales));
+        .then(res => res.json().then(data => ({ status: res.status, body: data })))
+        .then(res => {
+            if (res.status === 201 || res.status === 200) {
+                if (rol === 'administrador') {
+                    let adminsLocales = obtenerAdminsLocales();
+                    adminsLocales.push(usernameInput.toLowerCase());
+                    localStorage.setItem('lista_admins', JSON.stringify(adminsLocales));
+                }
+                document.getElementById('formNuevoUsuario').reset();
+                cargarDatosCompletos();
+                toastExito(`¡${rol.toUpperCase()} creado con éxito!`);
+            } else {
+                let mensajeError = "Error desconocido";
+                if (res.body.error) mensajeError = res.body.error;
+                else if (res.body.username) mensajeError = "El nombre de usuario ya existe.";
+                else if (res.body.password) mensajeError = "La contraseña es muy corta (mínimo 8).";
+                else mensajeError = JSON.stringify(res.body);
+                toastError(mensajeError);
             }
-            document.getElementById('formNuevoUsuario').reset();
-            cargarDatosCompletos();
-            toastExito(`¡${rol.toUpperCase()} creado con éxito!`);
-        } else {
-            let mensajeError = "Error desconocido";
-            if (res.body.error)         mensajeError = res.body.error;
-            else if (res.body.username) mensajeError = "El nombre de usuario ya existe.";
-            else if (res.body.password) mensajeError = "La contraseña es muy corta (mínimo 8).";
-            else                        mensajeError = JSON.stringify(res.body);
-            toastError(mensajeError);
-        }
-    })
-    .catch(() => toastError('Error de conexión con el servidor.'));
+        })
+        .catch(() => toastError('Error de conexión con el servidor.'));
 });
 
 
@@ -428,6 +471,7 @@ async function eliminarCliente(idCliente) {
     try {
         const res = await fetch(`/auth/clientes/${idCliente}/`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken'),
@@ -473,6 +517,7 @@ async function eliminarAdmin(idAdmin, username) {
     try {
         const res = await fetch(`/auth/administradores/${idAdmin}/`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken'),
@@ -500,8 +545,11 @@ async function verHistorial(idCliente, nombreCliente) {
     tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Cargando historial desde el servidor...</td></tr>`;
 
     try {
-        const response = await fetch(`/evaluaciones/historial/${idCliente}/`, { cache: 'no-store' });
-        
+        const response = await fetch(`/evaluaciones/historial/${idCliente}/`, {
+            cache: 'no-store',
+            credentials: 'include',
+        });
+
         if (!response.ok) {
             throw new Error("No se pudo obtener el historial.");
         }
@@ -539,12 +587,26 @@ function cerrarHistorial() {
     document.getElementById('seccionHistorial').style.display = 'none';
 }
 
-function cerrarSesion() {
+
+
+async function cerrarSesion() {
+    try {
+        await fetch('/auth/logout/', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        });
+    } catch (e) {
+        console.error('Error cerrando sesión en servidor:', e);
+    }
+
     localStorage.removeItem('id_usuario');
     localStorage.removeItem('rol_usuario');
     localStorage.removeItem('id_evaluacion');
+
     window.location.href = '/login/';
 }
+
 
 function cambiarVista(idVista, evento) {
     if (evento) evento.preventDefault();

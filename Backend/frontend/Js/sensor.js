@@ -127,14 +127,23 @@ function actualizarHistorialLocal(bpmTexto, nivelTexto) {
         localStorage.setItem('historial_local', JSON.stringify(historial));
     }
 }
+async function cerrarSesion() {
+    try {
+        await fetch('/auth/logout/', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        });
+    } catch (e) {
+        console.error('Error cerrando sesión en servidor:', e);
+    }
 
-function cerrarSesion() {
     localStorage.removeItem('id_usuario');
     localStorage.removeItem('rol_usuario');
     localStorage.removeItem('id_evaluacion');
-    window.location.href = '/login/'; 
-}
 
+    window.location.href = '/login/';
+}
 
 function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
     const contenedor = document.getElementById('toast-container');

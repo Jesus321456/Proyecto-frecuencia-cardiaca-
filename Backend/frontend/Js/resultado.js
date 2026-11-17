@@ -1,3 +1,11 @@
+function getCookie(name) {
+    const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    if (m) return m.pop();
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.getAttribute('content') : '';
+}
+
+
 let saliendoDePagina = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -42,7 +50,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const responseGuardar = await fetch(`/evaluaciones/medicion/navegador/${evaluacionId}/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',                              
+            headers: { 'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+             },
             body: JSON.stringify({ bpm: parseFloat(bpmReal), rmssd: parseFloat(rmssdReal) })
         });
 
@@ -50,7 +61,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const responsePredecir = await fetch(`/evaluaciones/predecir/${evaluacionId}/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            credentials: 'include',                              
+
+            headers: { 'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+             }
         });
 
         const data = await responsePredecir.json();
@@ -105,9 +120,20 @@ function nuevaEvaluacion() {
     
     window.location.href = '/formulario_uno/'; 
 }
+async function cerrarSesion() {
+    try {
+        await fetch('/auth/logout/', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        });
+    } catch (e) {
+        console.error('Error cerrando sesión en servidor:', e);
+    }
 
-function cerrarSesion() {
-    saliendoDePagina = true; 
-    localStorage.clear();
-    window.location.href = '/login/'; 
+    localStorage.removeItem('id_usuario');
+    localStorage.removeItem('rol_usuario');
+    localStorage.removeItem('id_evaluacion');
+
+    window.location.href = '/login/';
 }

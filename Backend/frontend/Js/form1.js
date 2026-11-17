@@ -106,10 +106,21 @@ function toastExito(msg) { mostrarToast(msg, 'exito'); }
 function toastError(msg) { mostrarToast(msg, 'error', 4000); } 
 function toastInfo(msg)  { mostrarToast(msg, 'info'); }
 
-function cerrarSesion() {
+async function cerrarSesion() {
+    try {
+        await fetch('/auth/logout/', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        });
+    } catch (e) {
+        console.error('Error cerrando sesión en servidor:', e);
+    }
+
     localStorage.removeItem('id_usuario');
     localStorage.removeItem('rol_usuario');
     localStorage.removeItem('id_evaluacion');
+
     window.location.href = '/login/';
 }
 
